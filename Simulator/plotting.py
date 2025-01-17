@@ -2,23 +2,26 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-def plot_scenarios(time_series, title="Generated Scenarios"):
+def plot_scenarios(time_series, var, title="Generated Scenarios"):
     """
     Plot the time series data.
 
     Parameters:
     time_series (np.array): Each row is a time series, with the same length.
+    var (float): Value at Risk (VaR) threshold.
     title (str): Title of the plot.
     """
     plt.figure(figsize=(10, 6))
     for i, ts in enumerate(time_series):
         plt.plot(ts, label=f"Scenario {i+1}")
     plt.title(title)
+    plt.axhline(var, color='red', linestyle='dashed', linewidth=2)
     plt.xlabel("Time Steps")
     plt.ylabel("Spot Price")
+    plt.legend(["Value at Risk"])
     plt.show()
 
-def plot_loss_distribution(losses, value_at_risk, n_scenarios):
+def plot_loss_distribution(losses, value_at_risk, n_scenarios, base_folder, title="name_me"):
     """
     Plot the distribution of losses and mark the Value at Risk (VaR).
 
@@ -26,15 +29,30 @@ def plot_loss_distribution(losses, value_at_risk, n_scenarios):
     losses (list of float): List of loss values.
     value_at_risk (float): Value at Risk (VaR) threshold.
     N_SCENARIOS (int): Number of scenarios.
+    base_folder (str): Base folder to save the results.
+    title_prefix (str): Prefix for the title of the plot.
     """
+    avg_loss = np.mean(losses)
+
     plt.figure(figsize=(10, 6))
     plt.hist(losses, bins=100, edgecolor='black', alpha=0.7)
     plt.axvline(value_at_risk, color='red', linestyle='dashed', linewidth=2)
+    plt.axvline(avg_loss, color='green', linestyle='dashed', linewidth=2)
     plt.title(f"Loss Distribution (samples = {n_scenarios})")
     plt.xlabel("Loss")
     plt.ylabel("Frequency")
-    plt.legend(["Value at Risk"])
-    plt.show()
+    plt.legend(["Value at Risk", f"Average Loss ({avg_loss:.2f})"])
+
+    # Check if the folder exists, if not create it
+    if not os.path.exists(base_folder):
+        os.makedirs(base_folder)
+
+    # Check if the subfolder exists, if not create it
+    if not os.path.exists(f"{base_folder}/loss_distributions"):
+        os.makedirs(f"{base_folder}/loss_distributions")
+
+    plt.savefig(f"{base_folder}/loss_distributions/{title}.png")
+
 
 def plot_results(alpha, rd, rf, k, optimized_x, optimized_y, optimization_time, base_folder, plot=True):
     """
