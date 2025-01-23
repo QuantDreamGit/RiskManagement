@@ -25,7 +25,7 @@ from Simulator.utils import set_environment
 env = set_environment()
 
 # Number of scenarios
-SCENARIOS = [1_000, 10_000, 100_000]# Number of scenarios
+SCENARIOS = [1_000, 5_000, 10_000]  # Number of scenarios
 # Parameters
 ALPHAS = [0.68, 0.95, 0.99]         # Confidence level
 foreign_currency = 1e6              # Amount of need foreign currency at time t
@@ -41,8 +41,8 @@ k = [s0*0.8,                        # Strike prices
      s0*1.1,
      s0*1.2]
 # Risk aversion parameters coefficients c
-coeffs = [0.01, 0.1, 1, 10]
-
+coeffs = [0.0001, 0.001, 0.01, 1]
+'''
 # Run the simulation for the basic model
 run_simulation(s0=s0,
                rds=rds,
@@ -61,9 +61,9 @@ run_simulation(s0=s0,
                env=env,
                base_folder="output/basic_model",
                single_run=False,
-               debug_model=True,
+               debug_model=False,
                save_loss_distributions=True)
-
+'''
 # Run the simulation for the VaR model
 run_simulation(s0=s0,
                rds=rds,
@@ -80,9 +80,9 @@ run_simulation(s0=s0,
                coeffs=coeffs,
                scenarios=SCENARIOS,
                env=env,
-               base_folder="output/var_model",
+               base_folder="output/var_model_low_coeffs",
                single_run=False,
-               debug_model=True,
+               debug_model=False,
                save_loss_distributions=True)
 
 # Run the simulation for the VaRMix model
@@ -101,7 +101,7 @@ run_simulation(s0=s0,
                coeffs=coeffs,
                scenarios=SCENARIOS,
                env=env,
-               base_folder="output/var_mix_model",
+               base_folder="output/var_mix_model_low_coeffs",
                single_run=False,
-               debug_model=True,
+               debug_model=False,
                save_loss_distributions=True)

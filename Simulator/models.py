@@ -101,7 +101,6 @@ def basic_model(k, foreign_currency, pi, alpha, coeff, s_t, f, c,
         print(f"AVG Loss: {np.mean([loss_i.getValue() for loss_i in loss])} $")
         print(f"AVG Excess Loss: {np.mean([excess_loss[i].X for i in range(n_scenarios)])} $")
         print("===============================================================\n")
-
     # Return results
     end_time = time()
 
@@ -109,9 +108,9 @@ def basic_model(k, foreign_currency, pi, alpha, coeff, s_t, f, c,
     if m.Status == GRB.OPTIMAL:
         return (x.X, [y[j].X for j in range(len(k))],
                 [loss_i.getValue() for loss_i in loss], [excess_loss[i].X for i in range(n_scenarios)],
-                end_time - time_start)
+                m.objVal, end_time - time_start)
     else:
-        return None, None, None, None, end_time - time_start
+        return None, None, None, None, None, end_time - time_start
 
 def var_model(k, foreign_currency, pi, alpha, coeff, s_t, f, c,
                   value_at_risk, benchmark_cost, n_scenarios, env,
@@ -229,9 +228,9 @@ def var_model(k, foreign_currency, pi, alpha, coeff, s_t, f, c,
     if m.Status == GRB.OPTIMAL:
         return (x.X, [y[j].X for j in range(len(k))],
                 [loss_i.getValue() for loss_i in loss], [excess_loss[i].X for i in range(n_scenarios)],
-                end_time - time_start)
+                m.objVal, end_time - time_start)
     else:
-        return None, None, None, None, end_time - time_start
+        return None, None, None, None, None, end_time - time_start
 
 def var_mix_model(k, foreign_currency, pi, alpha, coeff, s_t, f, c,
                   value_at_risk, benchmark_cost, n_scenarios, env,
@@ -351,6 +350,6 @@ def var_mix_model(k, foreign_currency, pi, alpha, coeff, s_t, f, c,
     if m.Status == GRB.OPTIMAL:
         return (x.X, [y[j].X for j in range(len(k))],
                 [loss_i.getValue() for loss_i in loss], [excess_loss[i].X for i in range(n_scenarios)],
-                end_time - time_start)
+                m.objVal, end_time - time_start)
     else:
-        return None, None, None, None, end_time - time_start
+        return None, None, None, None, None, end_time - time_start
