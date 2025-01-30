@@ -18,14 +18,14 @@ We will analyze 3 main scenarios:
         Then, rd = 0.02 and rf = 0.08
 """
 from Simulator.optimizer import run_simulation
-from Simulator.models import basic_model, var_model, var_mix_model
+from Simulator.models import basic_model, mix_model, dro_mix_model
 from Simulator.utils import set_environment
 
 # Set the environment
 env = set_environment()
 
 # Number of scenarios
-SCENARIOS = [1_000, 5_000, 10_000]  # Number of scenarios
+SCENARIOS = [1000, 5000, 10000]     # Number of scenarios
 # Parameters
 ALPHAS = [0.68, 0.95, 0.99]         # Confidence level
 foreign_currency = 1e6              # Amount of need foreign currency at time t
@@ -40,9 +40,10 @@ k = [s0*0.8,                        # Strike prices
      s0*1.0,
      s0*1.1,
      s0*1.2]
+
 # Risk aversion parameters coefficients c
-coeffs = [0.0001, 0.001, 0.01, 1]
-'''
+coeffs = [0.001, 0.01, 0.1, 1]
+
 # Run the simulation for the basic model
 run_simulation(s0=s0,
                rds=rds,
@@ -63,27 +64,7 @@ run_simulation(s0=s0,
                single_run=False,
                debug_model=False,
                save_loss_distributions=True)
-'''
-# Run the simulation for the VaR model
-run_simulation(s0=s0,
-               rds=rds,
-               rfs=rfs,
-               sigma=sigma,
-               t=t,
-               n_steps=n_steps,
-               k=k,
-               benchmark_cost=s0*foreign_currency,
-               foreign_currency=foreign_currency,
-               model=var_model,
-               model_parameters=None,
-               alphas=ALPHAS,
-               coeffs=coeffs,
-               scenarios=SCENARIOS,
-               env=env,
-               base_folder="output/var_model_low_coeffs",
-               single_run=False,
-               debug_model=False,
-               save_loss_distributions=True)
+
 
 # Run the simulation for the VaRMix model
 run_simulation(s0=s0,
@@ -95,13 +76,42 @@ run_simulation(s0=s0,
                k=k,
                benchmark_cost=s0*foreign_currency,
                foreign_currency=foreign_currency,
-               model=var_mix_model,
-               model_parameters=None,
+               model=mix_model,
+               model_parameters={
+                   "rho": 0.2,
+                   "max_coverage": 1_000_000
+               },
                alphas=ALPHAS,
                coeffs=coeffs,
                scenarios=SCENARIOS,
                env=env,
-               base_folder="output/var_mix_model_low_coeffs",
+               base_folder="output/mix_model",
+               single_run=False,
+               debug_model=False,
+               save_loss_distributions=True)
+
+# Run the simulation for the VaRMix model with DRO
+run_simulation(s0=s0,
+               rds=rds,
+               rfs=rfs,
+               sigma=sigma,
+               t=t,
+               n_steps=n_steps,
+               k=k,
+               benchmark_cost=s0*foreign_currency,
+               foreign_currency=foreign_currency,
+               model=dro_mix_model,
+               model_parameters={
+                   "rho": 0.2,
+                   "max_coverage": 1_000_000,
+                   "allowed_probabilities": [.1, 1],
+                   "tolerance": 1e-6
+               },
+               alphas=ALPHAS,
+               coeffs=coeffs,
+               scenarios=SCENARIOS,
+               env=env,
+               base_folder="output/dro_mix_model",
                single_run=False,
                debug_model=False,
                save_loss_distributions=True)
