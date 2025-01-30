@@ -131,20 +131,20 @@ def save_to_file(base_folder, alpha, coeff, rd, rf, n_scenarios, x, y, losses, o
         os.makedirs(base_folder)
 
     # Check if the file exists, if not create it
-    if not os.path.exists(f"{base_folder}/results.txt"):
+    if not os.path.exists(f"{base_folder}/results.csv"):
         with open(f"{base_folder}/results.txt", "w") as file:
             file.write("Coeff;Alpha;Rd;Rf;n_scenarios;OptimizedX;OptimizedY;ObjVal;AvgLoss;StdDevLoss;OptimizationTime\n")
             file.write(f"{coeff}; {alpha}; {rd}; {rf}; {n_scenarios}; {x}; {y}; {obj_val}; {avg_loss}; {std_loss}; {round(times, 3)}\n")
     # If the file exists and is the first iteration, remove the file and create a new one
     elif first_iteration:
         # if the file exists and is the first iteration, remove the file and create a new one
-        os.remove(f"{base_folder}/results.txt")
-        with open(f"{base_folder}/results.txt", "w") as file:
+        os.remove(f"{base_folder}/results.csv")
+        with open(f"{base_folder}/results.csv", "w") as file:
             file.write("Coeff;Alpha;Rd;Rf;n_scenarios;OptimizedX;OptimizedY;ObjVal;AvgLoss;StdDevLoss;OptimizationTime\n")
             file.write(f"{coeff}; {alpha}; {rd}; {rf}; {n_scenarios}; {x}; {y}; {obj_val}; {avg_loss}; {std_loss}; {round(times, 3)}\n")
     else:
         # otherwise append the results
-        with open(f"{base_folder}/results.txt", "a") as file:
+        with open(f"{base_folder}/results.csv", "a") as file:
             file.write(f"{coeff}; {alpha}; {rd}; {rf}; {n_scenarios}; {x}; {y}; {obj_val}; {avg_loss}; {std_loss}; {round(times, 3)}\n")
     # Return False to indicate that it is not the first iteration
     return False
