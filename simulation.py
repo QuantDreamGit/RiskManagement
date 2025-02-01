@@ -25,7 +25,7 @@ from Simulator.utils import set_environment
 env = set_environment()
 
 # Number of scenarios
-SCENARIOS = [1000, 5000, 10000]     # Number of scenarios
+SCENARIOS = [10_000, 50_000, 100_000]     # Number of scenarios
 # Parameters
 ALPHAS = [0.68, 0.95, 0.99]         # Confidence level
 foreign_currency = 1e6              # Amount of need foreign currency at time t
@@ -78,7 +78,7 @@ run_simulation(s0=s0,
                foreign_currency=foreign_currency,
                model=mix_model,
                model_parameters={
-                   "rho": 0.2,
+                   "rho": 0.3,
                    "max_coverage": 1_000_000
                },
                alphas=ALPHAS,
@@ -89,6 +89,9 @@ run_simulation(s0=s0,
                single_run=False,
                debug_model=False,
                save_loss_distributions=True)
+
+# Number of scenarios
+SCENARIOS = [5000, 7500, 10000, 12500]      # Number of scenarios
 
 # Run the simulation for the VaRMix model with DRO
 run_simulation(s0=s0,
@@ -102,7 +105,7 @@ run_simulation(s0=s0,
                foreign_currency=foreign_currency,
                model=dro_mix_model,
                model_parameters={
-                   "rho": 0.2,
+                   "rho": 0.3,
                    "max_coverage": 1_000_000,
                    "allowed_probabilities": [.1, 1],
                    "tolerance": 1e-6
@@ -111,7 +114,7 @@ run_simulation(s0=s0,
                coeffs=coeffs,
                scenarios=SCENARIOS,
                env=env,
-               base_folder="output/dro_mix_model",
+               base_folder="output/dro_mix_model_extra",
                single_run=False,
                debug_model=False,
                save_loss_distributions=True)
