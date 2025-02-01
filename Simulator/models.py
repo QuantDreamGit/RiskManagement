@@ -270,7 +270,6 @@ def dro_mix_model(k, foreign_currency, pi, alpha, coeff, s_t, f, c,
          sum[p_i * (s_i - mean(s_t))^2] >= var(s_t) * (1 - tolerance)
          sum[p_i * delta_i] == 1
          sum[delta_i] == 1
-         p_i >= 0
 
          p_i = {fixed_probabilities}
          gamma_i = {0, 1}
@@ -360,7 +359,6 @@ def dro_mix_model(k, foreign_currency, pi, alpha, coeff, s_t, f, c,
     # Ensure that the sum of the probabilities is equal to 1
     for i in range(n_scenarios):
         m.addConstr(p[i] == gp.quicksum(fixed_probabilities[k] * delta[i, k] for k in range(len(fixed_probabilities))))
-        m.addConstr(p[i] >= 0)
 
     ## CURRENCY BALANCE CONDITION ----------------------------
     for i in range(n_scenarios):
