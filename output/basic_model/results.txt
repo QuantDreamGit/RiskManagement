@@ -1,2 +1,0 @@
-Coeff,Alpha,Rd,Rf,n_scenarios,OptimizedX,OptimizedY,ObjVal,AvgLoss,StdDevLoss,OptimizationTime
-None; 0.68; 0.08; 0.02; 1000; 0; [1277420, 0, 0, 0, 0]; 115624; 36999; 25371; 0.468
